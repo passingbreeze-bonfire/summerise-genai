@@ -1,0 +1,59 @@
+{
+  "sessions": [
+    {
+      "id": "amazonq-aws-config-config",
+      "source": "amazon_q",
+      "timestamp": "2025-08-07T17:35:15.486059+09:00",
+      "title": "AWS Configuration: config",
+      "messages": [
+        {
+          "id": "aws-config-config",
+          "role": "system",
+          "content": "[default]\noutput=json\nregion=ap-northeast-2\n\n[profile hotelnow-prod-admin]\noutput = json\nregion=ap-northeast-2\n\n[profile hst-db-dev-admin]\noutput = json\nregion=ap-northeast-2\n\n[profile hst-de-dev-admin]\noutput = json\nregion=ap-northeast-2\n\n[profile hst-dev-admin]\noutput = json\nregion=ap-northeast-2\n\n[profile leisureq-dev-admin]\noutput = json\nregion=ap-northeast-2\n\n[profile sanha-solution-dev-admin]\noutput = json\nregion=ap-northeast-2\n\n[profile yanolja-db-dev-admin]\noutput = json\nregion=ap-northeast-2\n\n[profile yanolja-dev-admin]\noutput = json\nregion=ap-northeast-2\n\n[profile yanolja-dev-eks-admin]\noutput = json\nregion=ap-northeast-2\n\n[profile yanolja-dh-di-dev-admin]\noutput = json\nregion=ap-northeast-2\n\n[profile yanolja-di-prod-admin]\noutput = json\nregion=ap-northeast-2\n\n[profile yanolja-lab-dev-admin]\noutput = json\nregion=ap-northeast-2\n\n[profile yanolja-whitelabel-dev-admin]\noutput = json\nregion=ap-northeast-2\n\n[profile yanolja-ymember-dev-admin]\noutput = json\nregion=ap-northeast-2\n\n",
+          "timestamp": "2025-08-07T17:35:15.486059+09:00",
+          "metadata": {
+            "config_file": "/Users/a17236/.aws/config",
+            "source_type": "aws_config"
+          }
+        }
+      ],
+      "metadata": {
+        "config_path": "/Users/a17236/.aws/config",
+        "source_type": "aws_config"
+      }
+    },
+    {
+      "id": "amazonq-aws-config-credentials",
+      "source": "amazon_q",
+      "timestamp": "2025-08-07T17:35:15.486107+09:00",
+      "title": "AWS Configuration: credentials",
+      "messages": [
+        {
+          "id": "aws-config-credentials",
+          "role": "system",
+          "content": "[hotelnow-prod-admin]\naws_access_key_id=None\naws_secret_access_key=None\naws_session_token=None\n\n[hst-db-dev-admin]\naws_access_key_id=ASIA5IBUMESB3T6UBXDB\naws_secret_access_key=FA27yrlo/0MwbwEBOzoq+d9Kk5eTP0SnvV7zvpUK\naws_session_token=FwoGZXIvYXdzECMaDFmRt2OdkpO4Qp4rUiLkAShAwLRYpXrHc8487wdnwCsFiDieNyAsOgIW4fBV2ulv7frt59UxmHYmP9n1fUCAvdRwn6waAtBQjXV4tGeWYfoLDFqv+N7Wy9B9gT/xovpPhErfR0BLsmMFhejSc7I+FW7VUcr/NMtlODH+LJSKiOhk6H5xLXdCqf34I5gJESPIouD4BIJTB5Nhu/PWnw9wZMN/vHGSXyb6PS89zk6DLZtPfOE6+NV9wL7kSirvEX6auQD9MNR+klPZCLXNb8kZ+6J5phUriqc+gsG8nFhMDp5mNIq1r/0PI4TDzOC/6YPpGSnBhijcwYvEBjIt2r8/YlX0Jo8YHFG4mKKynzQPe8UeL0RM8TnGDCSBtSIC3kXYXeodvGrrTzHO\n\n[hst-de-dev-admin]\naws_access_key_id=ASIASG23IKFXHF5IBIDL\naws_secret_access_key=JgprI4l8oMMzif4x3Qbrz2drvMms2cYAiIMB18gj\naws_session_token=FwoGZXIvYXdzECMaDG6hODx/WyyQKH2oISLkAaMKitnLSIxru/65KEpPuvO8k/z5sDMmaq3c7SGrPfN91A8c9mlofyd1z9dHK80K3BWRworWBTD0ji8zo/HTHbTDdXfpy20uOb3doy8JaX7M24odheUbr8gZcecldZY2EM0xfVWC7cpnMoLN7DLW3W2GOzxx8p1WB66dURdggQzvh+iTYcLHIgQ9EHGmMZ1w3fQ0XVN3ki/2WFKvXHwBSh8B2TI/G48CPea99r0qXRfD30kRXZgEkPwctGowDgMiaMgF8vaCB9am8JARwC76ISBRP5IMkBb/bhN91965QWhqpTUOeijdwYvEBjIt9gBGpokK4guWdvnbgLJxm4W8o7ppy5JoOq11YuOdlv/XIYcNz7KsMCGTxkk+\n\n[hst-dev-admin]\naws_access_key_id=ASIAW44KJQXDW4KAYNFL\naws_secret_access_key=D9jSO5vvmlANCkbd77Mi+T2cYcQ5TVaI/83XDm/M\naws_session_token=FwoGZXIvYXdzECMaDG59DZxC68AimlaaLCLkAV7YglYcBKsrg7zReBEXY9aSIbNwxPNLt+2aKt0WqQvFt2Cqmw/jp4R2ATHCvpt71upMmXHguE+9W5xWrQ4JeGkFc/sATwshBty5WjUTOfNyjE29WpoXXfXC5YHIvtTk38Ymh6quKhKkHRUsWdXXKL/TfBGMgt86evVNop3Tb2ByhIieKS7nmHw3/cdmAMFcv7hFDzP49HJwxYec2MBI9pfZV/pHWyDBx8J1nQpmq4CS8i33hKYE3yBr0zZUi1jS+fpn3+TVI5SXlr7mb7L7/mVan2TrhQceuky0catgiTimHazN/SjdwYvEBjItgvL6AMNQGIG9KPu8mXEM0WCOkYniqCw84zrfDfGmwJz70DElxEkpVx7A6Dho\n\n[leisureq-dev-admin]\naws_access_key_id=ASIAVK4QI5XRA34BJG34\naws_secret_access_key=HkFd8rmMmtre6VHHdV9dZ7GMZmHS2jUE2X7jLbXI\naws_session_token=FwoGZXIvYXdzECMaDGKSI/+9JAzPv9SFLyLkAQcXIFmperU9Dc5pIPhO4O4Khj0IBsJuYzrTsnHh8GIx1ZUK+n/h4hFaBtGzJyjJ3dmOv2PPaEO6OUBIDzULUqcKXabNOy430L6D8p3i18eEyw6YBhSwsVn4kJABtMXQ03Ug6fei2BT4g0x7lWlvBI2w8TJFbEcSvwQXA5pAXz4uDge86mkiI1ISRAXM++zc6sy9NOwNcJMLjeMUIfPcv5W1vB86iF7Daa3GskNq83nIbb5bdjDquH3hJ6/y5c3I6vhSJ0p22mxx4H9QQy9kVo76/wCH9elcWwuenz0FBcL+8FNEvyjewYvEBjItYyOnB2jtzyu2mqe3l7yvU77QwkEsgrMcYxQ3ttF8MSkPsRRrTec1miuv+gkR\n\n[sanha-solution-dev-admin]\naws_access_key_id=None\naws_secret_access_key=None\naws_session_token=None\n\n[yanolja-db-dev-admin]\naws_access_key_id=ASIAX7MQ4B2MZ7KAEHHX\naws_secret_access_key=XEoatILS7weA4L5qJYJgFpws5yWNFSh8QMRLLT7d\naws_session_token=FwoGZXIvYXdzECMaDOE3yfpVJhJhQNMjySLkAVH5H9nmVdJ+41GkiOQHElrWzoX7cxJJ7qMTaueao75VfUL25O7xnffJ2wZRLCSlqnFxMQyN+xV6BVQvJWsdyIUNwMX65d9yfX2hAm0IwBwp8bqX2JC8OT3h3wRmZuLAdMAGkmIo6jvMQYxoggrMOJ0izCGmfs6Fnqv61kau6uW7qAyEwMz9TdGvPcXTaPAGUbBfsWEmDDE8YwvNy6RnBqZDu4XAN4DXQNPqyHWbI+UOHkWtfZZyc43lLOTPLk79KuZh3e6QsHDnx9AZ9/Q0ntjl58rYagCATZ5kkP+wlVzgmpKVBCjfwYvEBjItu/nkfVic3tB0mhmiUZX3yRbCVxAsEc7FNzdM7gVwEcm1CQxGtiOhrmoEVLcX\n\n[yanolja-dev-admin]\naws_access_key_id=ASIAXRCXRR6EUBVLYBV6\naws_secret_access_key=C0sNHzcL4B3fPa2f3vofwNUZbT+aPDT37GPA0Kmk\naws_session_token=FwoGZXIvYXdzECMaDAEypw3Y6In5+TOAGSLkAb3afvcwGYsPe1GgbiL+0xAzZScX+LCihg9BN4dLOu8u2KyoC1zBGxIkbMjPv0ap6pWZlUxhDh0Bj1TdipJYmUu55y6dhBeaxTXCa8nTrff91bfuSL9QNtdHC6Neef9LDLeii3g/+wfhy1JyzZEOucycFpJZGnZmo7UHlNQi3lJKO/8d2aZM1RutQ2E8zJ0EgZ+MX4rD8pUtsOEkpE+6kebQhuzz5cgx72ynEftzdqQWMY3u53H+4OlbtDCdy6DpeH5PUJ4B2B7R4sBO79/gIy+f9RJrkwiBe9Ngar3JL0sfYIDMvSjgwYvEBjIt7D22/ua570UlsE3Sl2VnPP7CTdR3ucXOyK1ijcVUfI4dJNoHAyRQAEOtavnT\n\n[yanolja-dev-eks-admin]\naws_access_key_id=ASIAXRCXRR6EWWERSJLP\naws_secret_access_key=nDwAwtpDu1QBMZAhklkpKgevh1jI/T/3o49UmbdU\naws_session_token=FwoGZXIvYXdzECMaDDEHDdNXL2B+tmGJ9SLkAZVhYpjsnTQcNFlPJ5CiXstyKTOnCN+Kb5Y8KpbZobSt3y0TzAjjMfCLCkUv0n24AylNQ7RjXnV/EdUPPGk1RVnH+Pbx6U7wbXXVxa2jrPW9Q6b7luOCajMEx7uYcK6Q2Y8wtSKmbwQotOrhUp+1tVqSGgpbguEdfeVD8UWYfSJYnAvTJq80wWWKC/BybaFFIwRi3hEF44wxUzQ9qH1s0W+zqwn+Ax2fyfRftZxICqHzyr2cNQnIPRuUb97kbttO8RIsaHeQ3x8ve5gKNa2tABhCF5DuuPaoxTlwT6G9sf7WKZT3wSjhwYvEBjIt8cBmykTDq9syPk7hYL8Chqiv7Dc85fjVQqY/yiFQUyTLLb1QuLTF5uCQ6LqD\n\n[yanolja-dh-di-dev-admin]\naws_access_key_id=ASIARG56QAD723ZVARH3\naws_secret_access_key=inbcLZRSqmjA9/D3sGarqikobZABnQzMTyW0/XYp\naws_session_token=FwoGZXIvYXdzECMaDD9j+lQH1MfSYzF6biLkAWXTSv3tKoXKV40jIdU0hKidBaL28hEoEX+1mTbjsBZfAq9bhIX67fx93Knmc7dHupsAobkFdRY9ZrYa6l3RPTwaA+j35uqXvCSelY8Q9b/xwKyNcitS4byyXESc6TJ+LaZFjNURjHhhVdFQGJEFCSr+9W4bOOBGlu58x8nd+ENRELU3BLiOyAdhFJrHYAKbLMb+jZPokfiZG1ySBbfMeczlwMi+l64hsSudU+JKkZxVqBoNYNvGmwDISLbGd8So6K0dnmnD8PvqPORG/8Ppx0uFHDesQWgLJKop9vjZmC6EpAz0GyjiwYvEBjItg8z1WQKkkWl2OIzk5Rc5NhKLDaU3FWcbfO/p/z/ItVH/LnKUYFG8Nx4YqIWI\n\n[yanolja-di-prod-admin]\naws_access_key_id=None\naws_secret_access_key=None\naws_session_token=None\n\n[yanolja-lab-dev-admin]\naws_access_key_id=None\naws_secret_access_key=None\naws_session_token=None\n\n[yanolja-whitelabel-dev-admin]\naws_access_key_id=ASIATMYNQI52RNOMGO4I\naws_secret_access_key=aimvYEQ4u0FCfsSI6CFXel9hCX+IQISVRiRaiTho\naws_session_token=FwoGZXIvYXdzECMaDCaFTX56bzHJFJpHLSLkAU1YNkdHAWDmpraUsItCpH11vWDLvi18VWaqfp4ATiWTKe+MsuNCPp2sXC17AKVBeET7PqW90j//kfeehVS7R1FVV/ZBVlY2/qzNhP82dJ14A9LSURbOCLKpiEabUWcmNWAdWqwWBtQkZlgGZrm0ExokkwAQTNHeyFC3vLZQRGO8QvSs9y0wqZkLeq8bhrAV3+h6oCRUg6p5pFnvC88Rl3ZuI9fQVixEu/DUjMz8NK+u9zMmVQHz1l4mL2ozG0xxfsuvoTgJOrg/+jopX2T/WMkX9Rfndmgv/fTvClgvQ2RPNwAbaCjiwYvEBjItGnFBgfxMdT9sVXddvwbJzf28WmEfZZiiEeNReiJ3faY+Rb+Cpo4GGQCy7dMX\n\n[yanolja-ymember-dev-admin]\naws_access_key_id=None\naws_secret_access_key=None\naws_session_token=None\n\n",
+          "timestamp": "2025-08-07T17:35:15.486107+09:00",
+          "metadata": {
+            "config_file": "/Users/a17236/.aws/credentials",
+            "source_type": "aws_config"
+          }
+        }
+      ],
+      "metadata": {
+        "config_path": "/Users/a17236/.aws/credentials",
+        "source_type": "aws_config"
+      }
+    }
+  ],
+  "total_count": 2,
+  "sources": [
+    "claude_code",
+    "gemini_cli",
+    "amazon_q"
+  ],
+  "collected_at": "2025-08-07T17:35:15.485779+09:00",
+  "duration": 638333,
+  "errors": [
+    "소스 'gemini_cli' 수집 실패: 데이터 수집 실패: config directory validation failed: gemini CLI config directory does not exist: /Users/a17236/.config/gemini"
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "sessions": [
+    {
+      "id": "amazonq-dummy-1",
+      "source": "amazon_q",
+      "timestamp": "2025-08-06T16:24:11.027943+09:00",
+      "title": "AWS EC2 Instance Management",
+      "messages": [
+        {
+          "id": "amazonq-dummy-1-user",
+          "role": "user",
+          "content": "How do I create an EC2 instance with auto-scaling?",
+          "timestamp": "2025-08-06T16:24:11.027943+09:00",
+          "metadata": {
+            "region": "us-west-2",
+            "service": "ec2"
+          }
+        },
+        {
+          "id": "amazonq-dummy-1-assistant",
+          "role": "assistant",
+          "content": "To create an EC2 instance with auto-scaling, you need to: 1) Create a launch template 2) Create an auto-scaling group 3) Configure scaling policies...",
+          "timestamp": "2025-08-06T16:25:11.027943+09:00",
+          "metadata": {
+            "region": "us-west-2",
+            "service": "ec2"
+          }
+        }
+      ],
+      "metadata": {
+        "region": "us-west-2",
+        "service": "ec2",
+        "source_type": "amazon_q_dummy",
+        "user_id": "demo-user"
+      }
+    },
+    {
+      "id": "amazonq-dummy-2",
+      "source": "amazon_q",
+      "timestamp": "2025-08-07T04:24:11.027943+09:00",
+      "title": "S3 Bucket Security Configuration",
+      "messages": [
+        {
+          "id": "amazonq-dummy-2-user",
+          "role": "user",
+          "content": "What are the best practices for securing S3 buckets?",
+          "timestamp": "2025-08-07T04:24:11.027943+09:00",
+          "metadata": {
+            "region": "us-east-1",
+            "service": "s3"
+          }
+        },
+        {
+          "id": "amazonq-dummy-2-assistant",
+          "role": "assistant",
+          "content": "Here are the key S3 security best practices: 1) Enable versioning 2) Configure bucket policies 3) Use IAM roles 4) Enable access logging...",
+          "timestamp": "2025-08-07T04:25:11.027943+09:00",
+          "metadata": {
+            "region": "us-east-1",
+            "service": "s3"
+          }
+        }
+      ],
+      "metadata": {
+        "region": "us-east-1",
+        "service": "s3",
+        "source_type": "amazon_q_dummy",
+        "user_id": "demo-user"
+      }
+    },
+    {
+      "id": "amazonq-dummy-3",
+      "source": "amazon_q",
+      "timestamp": "2025-08-07T10:24:11.027943+09:00",
+      "title": "Lambda Function Optimization",
+      "messages": [
+        {
+          "id": "amazonq-dummy-3-user",
+          "role": "user",
+          "content": "How can I optimize my Lambda function for better performance?",
+          "timestamp": "2025-08-07T10:24:11.027943+09:00",
+          "metadata": {
+            "region": "eu-west-1",
+            "service": "lambda"
+          }
+        },
+        {
+          "id": "amazonq-dummy-3-assistant",
+          "role": "assistant",
+          "content": "To optimize Lambda performance: 1) Right-size memory allocation 2) Minimize cold starts 3) Use connection pooling 4) Optimize code and dependencies...",
+          "timestamp": "2025-08-07T10:25:11.027943+09:00",
+          "metadata": {
+            "region": "eu-west-1",
+            "service": "lambda"
+          }
+        }
+      ],
+      "metadata": {
+        "region": "eu-west-1",
+        "service": "lambda",
+        "source_type": "amazon_q_dummy",
+        "user_id": "demo-user"
+      }
+    }
+  ],
+  "total_count": 3,
+  "sources": [
+    "claude_code",
+    "gemini_cli",
+    "amazon_q"
+  ],
+  "collected_at": "2025-08-07T16:24:11.027406+09:00",
+  "duration": 542792
+}

@@ -4,13 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-Summerise GenAI is a Go-based CLI tool that collects data from multiple AI CLI tools (Claude Code, Gemini CLI, Amazon Q CLI) and converts them into structured markdown documents. Built with Cobra CLI framework and designed for extensibility through MCP (Model Context Protocol) agents.
+ssamai is a Go-based CLI tool that collects data from multiple AI CLI tools (Claude Code, Gemini CLI, Amazon Q CLI) and converts them into structured markdown documents. Built with Cobra CLI framework for simple data collection and markdown generation.
 
 ## Core Architecture
 
 ### Project Structure
 ```
-summerise-genai/
+ssamai/
 ├── cmd/                    # CLI commands (Cobra framework)
 ├── internal/               # Internal packages
 │   ├── collector/         # Data collection implementations
@@ -18,24 +18,23 @@ summerise-genai/
 │   ├── processor/        # Data processing pipeline
 │   └── exporter/         # Markdown generation
 ├── pkg/                   # Public packages
-│   ├── models/           # Data models and types
-│   └── agents/           # MCP agents
+│   └── models/           # Data models and types
 └── configs/              # Configuration files
 ```
 
 ## Development Commands
 
 ### Build and Test
-- **Build**: `go build -o summerise-genai`
+- **Build**: `go build -o ssamai`
 - **Test**: `go test ./...`
 - **Format**: `goimports -w .`
 - **Lint**: `golangci-lint run` (if available)
 
 ### Application Commands
-- **Help**: `./summerise-genai --help`
-- **Config**: `./summerise-genai config --show`
-- **Collect**: `./summerise-genai collect --all --verbose`
-- **Export**: `./summerise-genai export --output ./summary.md`
+- **Help**: `./ssamai --help`
+- **Config**: `./ssamai config --show`
+- **Collect**: `./ssamai collect --all --verbose`
+- **Export**: `./ssamai export --output ./summary.md`
 
 ## Key Components
 
@@ -53,7 +52,7 @@ summerise-genai/
 
 ### 3. Configuration System (`internal/config/`)
 - YAML-based configuration with validation
-- MCP agent management
+- AI CLI tool settings management
 - Path expansion and environment handling
 - Default values and error handling
 
@@ -69,15 +68,6 @@ summerise-genai/
 - Metadata and timestamp handling
 - Custom field support
 
-## MCP Agent Integration
-
-The application supports Model Context Protocol agents for extensibility:
-- File system management
-- Markdown processing
-- Multi-CLI integration
-- Collaboration workflows
-
-Configure agents in `configs/agents.yaml` with proper command and argument settings.
 
 ## Development Guidelines
 
@@ -136,7 +126,6 @@ gemini -p "성능 최적화 관점에서 이 코드를 검토해주세요"
 - Input validation for configuration files
 - Safe handling of sensitive data in logs
 - Secure temporary file management
-- Access control for MCP agents
 
 ## Performance Notes
 
@@ -149,7 +138,6 @@ gemini -p "성능 최적화 관점에서 이 코드를 검토해주세요"
 ## Future Extensions
 
 - Real-time data collection monitoring
-- Web-based dashboard interface
-- Plugin architecture for custom collectors
 - Advanced filtering and search capabilities
 - Multi-language template support
+- Better data visualization in markdown output

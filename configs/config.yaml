@@ -1,0 +1,37 @@
+collection_settings:
+  claude_code:
+    config_dir: "~/.claude"
+    session_dir: "~/.claude/sessions"
+    history_file: "~/.claude/history.jsonl"
+    include_patterns:
+      - "*.json"
+      - "*.jsonl"
+    exclude_patterns:
+      - "*/temp/*"
+      
+  gemini_cli:
+    config_dir: "~/.gemini"
+    session_dir: "~/.gemini/sessions"
+    history_file: "~/.gemini/history.jsonl"
+    include_patterns:
+      - "*.json"
+      - "*.jsonl"
+    exclude_patterns:
+      - "*/cache/*"
+      
+  amazon_q:
+    config_dir: "~/.amazonq"
+    session_dir: "~/.amazonq/sessions"
+    history_file: "~/.amazonq/history.jsonl"
+    include_patterns:
+      - "*.json"
+    exclude_patterns:
+      - "*/tmp/*"
+
+output_settings:
+  template_dir: "./templates"
+  default_template: "comprehensive"
+  include_metadata: true
+  include_timestamps: true
+  format_code_blocks: true
+  generate_toc: true

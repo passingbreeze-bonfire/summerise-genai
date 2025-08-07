@@ -94,14 +94,3 @@ type CollectionResult struct {
 	Errors      []string          `json:"errors,omitempty" yaml:"errors,omitempty"`
 }
 
-// GeminiCollaboration은 Gemini CLI와의 협업 정보를 나타냅니다
-type GeminiCollaboration struct {
-	SessionID    string            `json:"session_id" yaml:"session_id"`
-	ReviewType   string            `json:"review_type" yaml:"review_type"`
-	RequestText  string            `json:"request_text" yaml:"request_text"`
-	Response     string            `json:"response" yaml:"response"`
-	Suggestions  []string          `json:"suggestions,omitempty" yaml:"suggestions,omitempty"`
-	Priority     string            `json:"priority" yaml:"priority"`
-	Timestamp    time.Time         `json:"timestamp" yaml:"timestamp"`
-	Metadata     map[string]string `json:"metadata,omitempty" yaml:"metadata,omitempty"`
-}

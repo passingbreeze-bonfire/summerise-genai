@@ -9,14 +9,21 @@ import (
 	"strings"
 	"time"
 
-	"summerise-genai/internal/processor"
-	"summerise-genai/pkg/models"
+	"ssamai/internal/interfaces"
+	"ssamai/internal/processor"
+	"ssamai/pkg/models"
 )
 
 // MarkdownExporter는 마크다운 내보내기를 담당합니다
 type MarkdownExporter struct {
 	config *models.ExportConfig
 }
+
+// MarkdownExporter가 모든 관련 인터페이스들을 구현하는지 컴파일 타임에 확인 (ISP 적용)
+var _ interfaces.DataExporter = (*MarkdownExporter)(nil)
+var _ interfaces.ExporterInfo = (*MarkdownExporter)(nil)
+var _ interfaces.ExporterValidator = (*MarkdownExporter)(nil)
+var _ interfaces.FullDataExporter = (*MarkdownExporter)(nil)
 
 // NewMarkdownExporter는 새로운 마크다운 내보내기 도구를 생성합니다
 func NewMarkdownExporter(config *models.ExportConfig) *MarkdownExporter {

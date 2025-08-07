@@ -8,9 +8,21 @@ import (
 	"path/filepath"
 	"time"
 
-	"summerise-genai/internal/config"
-	"summerise-genai/pkg/models"
+	"ssamai/internal/config"
+	"ssamai/pkg/models"
 )
+
+// init 함수는 패키지 로드 시 자동으로 호출되어 팩토리에 등록합니다.
+func init() {
+	Register(models.SourceClaudeCode, func(configInterface interface{}) models.Collector {
+		cfg, ok := configInterface.(config.CLIToolConfig)
+		if !ok {
+			// 기본 설정으로 생성
+			cfg = config.CLIToolConfig{}
+		}
+		return NewClaudeCodeCollector(cfg)
+	})
+}
 
 // ClaudeCodeCollector는 Claude Code 데이터 수집기를 나타냅니다
 type ClaudeCodeCollector struct {

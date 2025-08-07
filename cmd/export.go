@@ -6,12 +6,14 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
-	"summerise-genai/internal/config"
-	"summerise-genai/internal/exporter"
-	"summerise-genai/internal/processor"
-	"summerise-genai/pkg/models"
+	"ssamai/internal/config"
+	"ssamai/internal/exporter"
+	"ssamai/internal/processor"
+	"ssamai/internal/service"
+	"ssamai/pkg/models"
 
 	"github.com/spf13/cobra"
 )
@@ -26,53 +28,91 @@ var (
 	exportOutputFile  string
 )
 
-// exportCmd는 마크다운 내보내기 명령어를 나타냅니다
-var exportCmd = &cobra.Command{
-	Use:   "export",
-	Short: "수집된 데이터를 마크다운 파일로 내보냅니다",
-	Long: `export 명령어는 collect 명령어로 수집된 데이터를 구조화된
+// NewExportCmd는 서비스 레이어를 주입받아 export 명령어를 생성합니다.
+func NewExportCmd(exportSvc *service.ExportService) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "export",
+		Short: "수집된 데이터를 마크다운 파일로 내보냅니다",
+		Long: `export 명령어는 collect 명령어로 수집된 데이터를 구조화된
 마크다운 문서로 변환하여 저장합니다.
 
 다양한 템플릿과 옵션을 지원하여 필요에 맞는 형태의
 문서를 생성할 수 있습니다.`,
-	Example: `  # 기본 설정으로 마크다운 내보내기
-  summerise-genai export --output ./summary.md
+		Example: `  # 기본 설정으로 마크다운 내보내기
+  ssamai export --output ./summary.md
 
   # 특정 템플릿 사용하여 내보내기
-  summerise-genai export --template technical --output ./tech-summary.md
+  ssamai export --template technical --output ./tech-summary.md
 
   # 메타데이터와 목차 제외하고 내보내기
-  summerise-genai export --no-toc --no-meta --output ./simple.md
+  ssamai export --no-toc --no-meta --output ./simple.md
 
   # 사용자 정의 필드 추가하여 내보내기
-  summerise-genai export --custom project=MyProject --custom version=1.0 --output ./project-summary.md
+  ssamai export --custom project=MyProject --custom version=1.0 --output ./project-summary.md
 
   # 저장된 데이터 파일에서 내보내기
-  summerise-genai export --data ./collected-data.json --output ./from-file.md`,
-	RunE: runExport,
-}
-
-func init() {
-	rootCmd.AddCommand(exportCmd)
+  ssamai export --data ./collected-data.json --output ./from-file.md`,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return runExportWithService(cmd, args, exportSvc)
+		},
+	}
 
 	// 플래그 정의
-	exportCmd.Flags().StringVar(&exportOutputFile, "output", "", 
+	cmd.Flags().StringVar(&exportOutputFile, "output", "", 
 		"출력 마크다운 파일 경로 (필수)")
-	exportCmd.Flags().StringVarP(&exportTemplate, "template", "t", "", 
+	cmd.Flags().StringVarP(&exportTemplate, "template", "t", "", 
 		"사용할 마크다운 템플릿 (기본값: comprehensive)")
-	exportCmd.Flags().BoolVar(&exportNoTOC, "no-toc", false, 
+	cmd.Flags().BoolVar(&exportNoTOC, "no-toc", false, 
 		"목차(Table of Contents) 생성 제외")
-	exportCmd.Flags().BoolVar(&exportNoMeta, "no-meta", false, 
+	cmd.Flags().BoolVar(&exportNoMeta, "no-meta", false, 
 		"메타데이터 정보 제외")
-	exportCmd.Flags().BoolVar(&exportNoTimestamp, "no-timestamp", false, 
+	cmd.Flags().BoolVar(&exportNoTimestamp, "no-timestamp", false, 
 		"타임스탬프 정보 제외")
-	exportCmd.Flags().StringToStringVar(&exportCustomFields, "custom", map[string]string{}, 
+	cmd.Flags().StringToStringVar(&exportCustomFields, "custom", map[string]string{}, 
 		"사용자 정의 메타데이터 필드 (key=value 형식)")
-	exportCmd.Flags().StringVarP(&exportDataFile, "data", "d", "", 
+	cmd.Flags().StringVarP(&exportDataFile, "data", "d", "", 
 		"저장된 데이터 파일에서 읽어서 내보내기")
 
 	// 필수 플래그
-	exportCmd.MarkFlagRequired("output")
+	cmd.MarkFlagRequired("output")
+	
+	return cmd
+}
+
+// runExportWithService는 서비스를 사용하여 내보내기를 실행합니다
+func runExportWithService(cmd *cobra.Command, args []string, exportSvc *service.ExportService) error {
+	if verbose {
+		fmt.Println("마크다운 내보내기를 시작합니다...")
+	}
+
+	// 설정 로드 (필요시)
+	cfg, err := config.LoadConfig(cfgFile)
+	if err != nil {
+		return fmt.Errorf("설정 로드 실패: %w", err)
+	}
+
+	// 내보내기 설정 구성
+	exportConfig, err := buildExportConfig(cfg)
+	if err != nil {
+		return fmt.Errorf("내보내기 설정 구성 실패: %w", err)
+	}
+
+	if verbose {
+		fmt.Printf("내보내기 설정: 템플릿=%s, 출력=%s\n", 
+			exportConfig.Template, exportConfig.OutputPath)
+	}
+
+	// 서비스의 ExportFromFile 메서드 호출
+	err = exportSvc.ExportFromFile(cmd.Context(), exportDataFile, exportOutputFile, exportConfig)
+	if err != nil {
+		return fmt.Errorf("마크다운 내보내기 실패: %w", err)
+	}
+
+	if verbose {
+		fmt.Printf("마크다운 파일 생성 완료: %s\n", exportOutputFile)
+	}
+
+	return nil
 }
 
 func runExport(cmd *cobra.Command, args []string) error {
@@ -197,14 +237,38 @@ func loadDataFromFile(dataFile string) (*models.CollectionResult, error) {
 }
 
 func loadLatestCollectedData() (*models.CollectionResult, error) {
-	// TODO: 실제 구현에서는 최근 수집된 데이터를 로드해야 합니다
-	// 현재는 더미 데이터를 생성합니다
-	
 	if verbose {
 		fmt.Println("최신 수집 데이터를 로드하는 중...")
 	}
 
-	// 더미 데이터 생성 (실제로는 collect 명령어 결과를 로드)
+	// 데이터 디렉토리 경로
+	dataDir := filepath.Join(".", ".ssamai", "data")
+
+	// 1. 먼저 latest.json 파일 확인
+	latestPath := filepath.Join(dataDir, "latest.json")
+	if _, err := os.Stat(latestPath); err == nil {
+		if verbose {
+			fmt.Printf("최신 데이터 파일 발견: %s\n", latestPath)
+		}
+		return loadDataFromFile(latestPath)
+	}
+
+	// 2. latest.json이 없으면 가장 최근 파일 찾기
+	latestFile, err := findLatestDataFile(dataDir)
+	if err == nil && latestFile != "" {
+		if verbose {
+			fmt.Printf("가장 최신 데이터 파일 발견: %s\n", latestFile)
+		}
+		return loadDataFromFile(latestFile)
+	}
+
+	// 3. 실제 데이터 파일이 없으면 폴백 처리
+	if verbose {
+		fmt.Println("수집된 데이터 파일이 없습니다. 더미 데이터를 생성합니다.")
+		fmt.Println("실제 데이터를 원한다면 먼저 'collect' 명령어를 실행하세요.")
+	}
+
+	// 더미 데이터 생성 (기존 로직 유지)
 	now := time.Now()
 	result := &models.CollectionResult{
 		Sessions: []models.SessionData{
@@ -212,7 +276,7 @@ func loadLatestCollectedData() (*models.CollectionResult, error) {
 				ID:        "claude-session-export-demo",
 				Source:    models.SourceClaudeCode,
 				Timestamp: now.Add(-2 * time.Hour),
-				Title:     "코드 리팩토링 세션",
+				Title:     "코드 리팩토링 세션 (더미 데이터)",
 				Messages: []models.Message{
 					{
 						ID:        "msg-1",
@@ -247,12 +311,16 @@ func loadLatestCollectedData() (*models.CollectionResult, error) {
 						ContentType: "text/x-go",
 					},
 				},
+				Metadata: map[string]string{
+					"fallback": "true",
+					"reason":   "실제 수집 데이터가 없음",
+				},
 			},
 			{
 				ID:        "gemini-session-export-demo",
 				Source:    models.SourceGeminiCLI,
 				Timestamp: now.Add(-1 * time.Hour),
-				Title:     "API 설계 검토",
+				Title:     "API 설계 검토 (더미 데이터)",
 				Messages: []models.Message{
 					{
 						ID:        "msg-3",
@@ -267,12 +335,16 @@ func loadLatestCollectedData() (*models.CollectionResult, error) {
 						Timestamp: now.Add(-1*time.Hour + 3*time.Minute),
 					},
 				},
+				Metadata: map[string]string{
+					"fallback": "true",
+					"reason":   "실제 수집 데이터가 없음",
+				},
 			},
 			{
 				ID:        "amazonq-session-export-demo",
 				Source:    models.SourceAmazonQ,
 				Timestamp: now.Add(-30 * time.Minute),
-				Title:     "AWS 인프라 최적화",
+				Title:     "AWS 인프라 최적화 (더미 데이터)",
 				Messages: []models.Message{
 					{
 						ID:        "msg-5",
@@ -287,15 +359,67 @@ func loadLatestCollectedData() (*models.CollectionResult, error) {
 						Timestamp: now.Add(-30*time.Minute + 2*time.Minute),
 					},
 				},
+				Metadata: map[string]string{
+					"fallback": "true",
+					"reason":   "실제 수집 데이터가 없음",
+				},
 			},
 		},
 		TotalCount:  3,
 		Sources:     []models.CollectionSource{models.SourceClaudeCode, models.SourceGeminiCLI, models.SourceAmazonQ},
 		CollectedAt: now,
 		Duration:    5 * time.Second,
+		Errors:      []string{"실제 수집 데이터가 없어 더미 데이터를 사용합니다."},
 	}
 
 	return result, nil
+}
+
+// findLatestDataFile은 데이터 디렉토리에서 가장 최신 데이터 파일을 찾습니다
+func findLatestDataFile(dataDir string) (string, error) {
+	// 디렉토리 존재 확인
+	if _, err := os.Stat(dataDir); os.IsNotExist(err) {
+		return "", fmt.Errorf("데이터 디렉토리가 존재하지 않습니다: %s", dataDir)
+	}
+
+	// 디렉토리 읽기
+	entries, err := os.ReadDir(dataDir)
+	if err != nil {
+		return "", fmt.Errorf("데이터 디렉토리 읽기 실패: %w", err)
+	}
+
+	var latestFile string
+	var latestTime time.Time
+
+	// collection-*.json 패턴의 파일들 검사
+	for _, entry := range entries {
+		if entry.IsDir() {
+			continue
+		}
+
+		name := entry.Name()
+		// latest.json은 제외하고 collection-*.json 패턴만 검사
+		if name == "latest.json" || !strings.HasPrefix(name, "collection-") || !strings.HasSuffix(name, ".json") {
+			continue
+		}
+
+		// 파일 수정시간 확인
+		info, err := entry.Info()
+		if err != nil {
+			continue
+		}
+
+		if latestFile == "" || info.ModTime().After(latestTime) {
+			latestFile = filepath.Join(dataDir, name)
+			latestTime = info.ModTime()
+		}
+	}
+
+	if latestFile == "" {
+		return "", fmt.Errorf("수집 데이터 파일을 찾을 수 없습니다")
+	}
+
+	return latestFile, nil
 }
 
 func saveDataToFile(result *models.CollectionResult, filename string) error {

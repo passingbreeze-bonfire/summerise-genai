@@ -10,28 +10,8 @@ import (
 
 // Config는 애플리케이션 전체 설정을 나타냅니다
 type Config struct {
-	Agents            map[string]AgentConfig   `yaml:"agents"`
-	MCPSettings       MCPSettings              `yaml:"mcp_settings"`
-	CollectionSettings CollectionSettings      `yaml:"collection_settings"`
-	OutputSettings    OutputSettings           `yaml:"output_settings"`
-}
-
-// AgentConfig는 MCP 에이전트 설정을 나타냅니다
-type AgentConfig struct {
-	Name        string            `yaml:"name"`
-	Description string            `yaml:"description"`
-	Command     string            `yaml:"command"`
-	Args        []string          `yaml:"args"`
-	Env         map[string]string `yaml:"env,omitempty"`
-	Enabled     bool              `yaml:"enabled"`
-}
-
-// MCPSettings는 MCP 서버 설정을 나타냅니다
-type MCPSettings struct {
-	Timeout    int    `yaml:"timeout"`
-	MaxRetries int    `yaml:"max_retries"`
-	LogLevel   string `yaml:"log_level"`
-	LogFile    string `yaml:"log_file"`
+	CollectionSettings CollectionSettings `yaml:"collection_settings"`
+	OutputSettings     OutputSettings     `yaml:"output_settings"`
 }
 
 // CollectionSettings는 데이터 수집 설정을 나타냅니다
@@ -64,8 +44,15 @@ type OutputSettings struct {
 
 // LoadConfig는 설정 파일을 로드합니다
 func LoadConfig(configPath string) (*Config, error) {
+	// 빈 경로일 경우 기본 설정 반환
+	if configPath == "" {
+		config := createDefaultConfig()
+		config.SetDefaults()
+		return config, nil
+	}
+	
 	// 경로 확장 (~ 처리)
-	if configPath[0] == '~' {
+	if len(configPath) > 0 && configPath[0] == '~' {
 		home, err := os.UserHomeDir()
 		if err != nil {
 			return nil, fmt.Errorf("홈 디렉토리를 찾을 수 없습니다: %w", err)
@@ -76,6 +63,12 @@ func LoadConfig(configPath string) (*Config, error) {
 	// 설정 파일 읽기
 	data, err := os.ReadFile(configPath)
 	if err != nil {
+		// 파일이 없으면 기본 설정 반환
+		if os.IsNotExist(err) {
+			config := createDefaultConfig()
+			config.SetDefaults()
+			return config, nil
+		}
 		return nil, fmt.Errorf("설정 파일을 읽을 수 없습니다 (%s): %w", configPath, err)
 	}
 
@@ -98,49 +91,49 @@ func LoadConfig(configPath string) (*Config, error) {
 
 // Validate는 설정의 유효성을 검증합니다
 func (c *Config) Validate() error {
-	// MCP 설정 검증
-	if c.MCPSettings.Timeout <= 0 {
-		return fmt.Errorf("MCP timeout은 0보다 커야 합니다")
-	}
-	
-	if c.MCPSettings.MaxRetries < 0 {
-		return fmt.Errorf("MCP max_retries는 0 이상이어야 합니다")
-	}
-
-	// 에이전트 설정 검증
-	for name, agent := range c.Agents {
-		if agent.Command == "" {
-			return fmt.Errorf("에이전트 '%s'의 command가 비어있습니다", name)
-		}
-	}
-
-	// 로그 레벨 검증
-	validLogLevels := map[string]bool{
-		"debug": true, "info": true, "warn": true, "error": true,
-	}
-	if !validLogLevels[c.MCPSettings.LogLevel] {
-		return fmt.Errorf("유효하지 않은 로그 레벨: %s", c.MCPSettings.LogLevel)
-	}
-
+	// 기본 검증 로직 추가 가능
 	return nil
+}
+
+// createDefaultConfig는 기본 설정을 생성합니다
+func createDefaultConfig() *Config {
+	return &Config{
+		CollectionSettings: CollectionSettings{
+			ClaudeCode: CLIToolConfig{
+				ConfigDir:       "~/.claude",
+				SessionDir:      "~/.claude/sessions",
+				HistoryFile:     "~/.claude/history.json",
+				IncludePatterns: []string{"*.json", "*.md", "*.log"},
+				ExcludePatterns: []string{"*.tmp", "*.cache"},
+			},
+			GeminiCLI: CLIToolConfig{
+				ConfigDir:       "~/.config/gemini",
+				HistoryFile:     "~/.config/gemini/history.json",
+				LogsDir:         "~/.config/gemini/logs",
+				IncludePatterns: []string{"*.json", "*.log", "*.yaml"},
+				ExcludePatterns: []string{"*.tmp"},
+			},
+			AmazonQ: CLIToolConfig{
+				ConfigDir:       "~/.aws/amazonq",
+				HistoryFile:     "~/.aws/amazonq/history.json",
+				CacheDir:        "~/.aws/amazonq/cache",
+				IncludePatterns: []string{"*.json", "*.log"},
+				ExcludePatterns: []string{"*.tmp"},
+			},
+		},
+		OutputSettings: OutputSettings{
+			TemplateDir:       "./templates",
+			DefaultTemplate:   "comprehensive",
+			IncludeMetadata:   true,
+			IncludeTimestamps: true,
+			FormatCodeBlocks:  true,
+			GenerateTOC:       true,
+		},
+	}
 }
 
 // SetDefaults는 기본값을 설정합니다
 func (c *Config) SetDefaults() {
-	// MCP 설정 기본값
-	if c.MCPSettings.Timeout == 0 {
-		c.MCPSettings.Timeout = 30000
-	}
-	if c.MCPSettings.MaxRetries == 0 {
-		c.MCPSettings.MaxRetries = 3
-	}
-	if c.MCPSettings.LogLevel == "" {
-		c.MCPSettings.LogLevel = "info"
-	}
-	if c.MCPSettings.LogFile == "" {
-		c.MCPSettings.LogFile = "./logs/mcp-agents.log"
-	}
-
 	// 출력 설정 기본값
 	if c.OutputSettings.TemplateDir == "" {
 		c.OutputSettings.TemplateDir = "./templates"
@@ -150,36 +143,16 @@ func (c *Config) SetDefaults() {
 	}
 }
 
-// GetEnabledAgents는 활성화된 에이전트 목록을 반환합니다
-func (c *Config) GetEnabledAgents() map[string]AgentConfig {
-	enabled := make(map[string]AgentConfig)
-	for name, agent := range c.Agents {
-		if agent.Enabled {
-			enabled[name] = agent
-		}
-	}
-	return enabled
-}
-
 // ExpandPath는 경로의 ~ 기호를 확장합니다
 func ExpandPath(path string) (string, error) {
 	if path == "" || path[0] != '~' {
 		return path, nil
 	}
-	
+
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", fmt.Errorf("홈 디렉토리를 찾을 수 없습니다: %w", err)
 	}
-	
-	return filepath.Join(home, path[1:]), nil
-}
 
-// EnsureLogDir는 로그 디렉토리를 생성합니다
-func (c *Config) EnsureLogDir() error {
-	logDir := filepath.Dir(c.MCPSettings.LogFile)
-	if err := os.MkdirAll(logDir, 0755); err != nil {
-		return fmt.Errorf("로그 디렉토리 생성 실패: %w", err)
-	}
-	return nil
+	return filepath.Join(home, path[1:]), nil
 }

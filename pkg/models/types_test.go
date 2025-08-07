@@ -354,40 +354,53 @@ func TestCollectionResult_EmptyAndPopulated(t *testing.T) {
 	assert.Len(t, populatedResult.Errors, 1)
 }
 
-func TestGeminiCollaboration_BasicFields(t *testing.T) {
+func TestSessionData_WithComplexMetadata(t *testing.T) {
 	now := time.Now()
 	
-	collab := GeminiCollaboration{
-		SessionID:   "gemini-session-123",
-		ReviewType:  "code_review",
-		RequestText: "다음 코드를 검토해주세요",
-		Response:    "코드가 잘 작성되었습니다",
-		Suggestions: []string{"주석 추가", "테스트 코드 작성"},
-		Priority:    "high",
-		Timestamp:   now,
+	session := SessionData{
+		ID:        "complex-session-123",
+		Source:    SourceGeminiCLI,
+		Timestamp: now,
+		Title:     "Complex Metadata Test",
+		Messages: []Message{
+			{
+				ID:        "complex-msg-1",
+				Role:      "user",
+				Content:   "다음 코드를 검토해주세요",
+				Timestamp: now,
+			},
+			{
+				ID:        "complex-msg-2", 
+				Role:      "assistant",
+				Content:   "코드가 잘 작성되었습니다",
+				Timestamp: now.Add(time.Minute),
+			},
+		},
 		Metadata: map[string]string{
-			"language": "go",
-			"context":  "backend",
+			"review_type": "code_review",
+			"language":    "go",
+			"context":     "backend",
+			"priority":    "high",
 		},
 	}
 
-	assert.Equal(t, "gemini-session-123", collab.SessionID)
-	assert.Equal(t, "code_review", collab.ReviewType)
-	assert.NotEmpty(t, collab.RequestText)
-	assert.NotEmpty(t, collab.Response)
-	assert.Len(t, collab.Suggestions, 2)
-	assert.Equal(t, "high", collab.Priority)
-	assert.Len(t, collab.Metadata, 2)
+	assert.Equal(t, "complex-session-123", session.ID)
+	assert.Equal(t, SourceGeminiCLI, session.Source)
+	assert.NotEmpty(t, session.Title)
+	assert.Len(t, session.Messages, 2)
+	assert.Equal(t, "high", session.Metadata["priority"])
+	assert.Len(t, session.Metadata, 4)
 
 	// JSON 직렬화 테스트
-	jsonData, err := json.Marshal(collab)
+	jsonData, err := json.Marshal(session)
 	assert.NoError(t, err)
 
-	var decodedCollab GeminiCollaboration
-	err = json.Unmarshal(jsonData, &decodedCollab)
+	var decodedSession SessionData
+	err = json.Unmarshal(jsonData, &decodedSession)
 	assert.NoError(t, err)
-	assert.Equal(t, collab.SessionID, decodedCollab.SessionID)
-	assert.Equal(t, len(collab.Suggestions), len(decodedCollab.Suggestions))
+	assert.Equal(t, session.ID, decodedSession.ID)
+	assert.Equal(t, len(session.Messages), len(decodedSession.Messages))
+	assert.Equal(t, session.Metadata["language"], decodedSession.Metadata["language"])
 }
 
 // 벤치마크 테스트

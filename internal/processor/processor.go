@@ -7,13 +7,20 @@ import (
 	"strings"
 	"time"
 
-	"summerise-genai/pkg/models"
+	"ssamai/internal/interfaces"
+	"ssamai/pkg/models"
 )
 
 // Processor는 데이터 처리를 담당합니다
 type Processor struct {
 	config *models.ExportConfig
 }
+
+// Processor가 모든 관련 인터페이스들을 구현하는지 컴파일 타임에 확인 (ISP 적용)
+var _ interfaces.DataProcessor = (*Processor)(nil)
+var _ interfaces.ProcessorInfo = (*Processor)(nil)
+var _ interfaces.ProcessorValidator = (*Processor)(nil)
+var _ interfaces.FullDataProcessor = (*Processor)(nil)
 
 // NewProcessor는 새로운 데이터 처리기를 생성합니다
 func NewProcessor(config *models.ExportConfig) *Processor {

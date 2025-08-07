@@ -1,4 +1,4 @@
-module summerise-genai
+module ssamai
 
 go 1.24.5
 
